@@ -152,5 +152,108 @@ namespace ArdalisRating.Tests
         }
 
         #endregion
+
+        #region Flood Policy Tests
+
+        [Fact]
+        public void ReturnsRatingOf0For200000BondOn260000FloodPolicy()
+        {
+            var policy = new Policy
+            {
+                Type = PolicyType.Flood,
+                BondAmount = 200000,
+                Valuation = 260000
+            };
+            string json = JsonConvert.SerializeObject(policy);
+            File.WriteAllText("policy.json", json);
+
+            var engine = new RatingEngine();
+            engine.Rate();
+            var result = engine.Rating;
+
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void ReturnsRatingOf20000For200000BondWith1000ElevationFloodPolicy()
+        {
+            var policy = new Policy
+            {
+                Type = PolicyType.Flood,
+                BondAmount = 200000,
+                Valuation = 200000,
+                ElevationAboveSeaLevelFeet = 1000
+            };
+            string json = JsonConvert.SerializeObject(policy);
+            File.WriteAllText("policy.json", json);
+
+            var engine = new RatingEngine();
+            engine.Rate();
+            var result = engine.Rating;
+
+            Assert.Equal(10000, result);
+        }
+
+        [Fact]
+        public void ReturnsRatingOf20000For200000BondWith50ElevationFloodPolicy()
+        {
+            var policy = new Policy
+            {
+                Type = PolicyType.Flood,
+                BondAmount = 200000,
+                Valuation = 200000,
+                ElevationAboveSeaLevelFeet = 50
+            };
+            string json = JsonConvert.SerializeObject(policy);
+            File.WriteAllText("policy.json", json);
+
+            var engine = new RatingEngine();
+            engine.Rate();
+            var result = engine.Rating;
+
+            Assert.Equal(20000, result);
+        }
+
+        [Fact]
+        public void ReturnsRatingOf15000For200000BondWith250ElevationFloodPolicy()
+        {
+            var policy = new Policy
+            {
+                Type = PolicyType.Flood,
+                BondAmount = 200000,
+                Valuation = 200000,
+                ElevationAboveSeaLevelFeet = 250
+            };
+            string json = JsonConvert.SerializeObject(policy);
+            File.WriteAllText("policy.json", json);
+
+            var engine = new RatingEngine();
+            engine.Rate();
+            var result = engine.Rating;
+
+            Assert.Equal(15000, result);
+        }
+
+        [Fact]
+        public void ReturnsRatingOf11000For200000BondWith750ElevationFloodPolicy()
+        {
+            var policy = new Policy
+            {
+                Type = PolicyType.Flood,
+                BondAmount = 200000,
+                Valuation = 200000,
+                ElevationAboveSeaLevelFeet = 750
+            };
+            string json = JsonConvert.SerializeObject(policy);
+            File.WriteAllText("policy.json", json);
+
+            var engine = new RatingEngine();
+            engine.Rate();
+            var result = engine.Rating;
+
+            Assert.Equal(11000, result);
+        }
+
+        #endregion
     }
 }
