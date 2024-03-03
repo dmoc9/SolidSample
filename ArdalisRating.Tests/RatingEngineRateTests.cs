@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ArdalisRating.Tests
 {
-    public class RatingEngineRate
+    public class RatingEngineRateTests
     {
         [Fact]
         public void ReturnsRatingOf10000For200000LandPolicy()
