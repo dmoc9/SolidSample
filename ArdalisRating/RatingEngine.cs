@@ -17,6 +17,7 @@ namespace ArdalisRating
         public void Rate()
         {
             Logger.Log("Starting rate.");
+
             Logger.Log("Loading policy.");
 
             string policyJson = PolicySource.GetPolicyFromSource();
