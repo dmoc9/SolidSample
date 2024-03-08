@@ -2,8 +2,8 @@
 {
     public class LandPolicyRater : Rater
     {
-        public LandPolicyRater(RatingEngine engine, ConsoleLogger logger)
-            : base (engine, logger)
+        public LandPolicyRater(IRatingContext context)
+            : base(context)
         {
         }
 
@@ -24,7 +24,7 @@
                 return;
             }
 
-            _engine.Rating = policy.BondAmount * 0.05m;
+            _context.UpdateRating(policy.BondAmount * 0.05m);
         }
     }
 }
