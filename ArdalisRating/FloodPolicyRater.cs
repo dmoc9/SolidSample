@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ArdalisRating
+﻿namespace ArdalisRating
 {
     public class FloodPolicyRater : Rater
     {
