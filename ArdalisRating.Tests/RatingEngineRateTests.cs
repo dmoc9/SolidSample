@@ -14,7 +14,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Auto,
+                Type = PolicyType.Auto.ToString(),
                 Make = "Mercedes"
             };
             string json = JsonConvert.SerializeObject(policy);
@@ -32,7 +32,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Auto,
+                Type = PolicyType.Auto.ToString(),
                 Make = "BMW",
                 Deductible = 200
             };
@@ -51,7 +51,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Auto,
+                Type = PolicyType.Auto.ToString(),
                 Make = "BMW",
                 Deductible = 500
             };
@@ -74,7 +74,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Land,
+                Type = PolicyType.Land.ToString(),
                 BondAmount = 200000,
                 Valuation = 260000
             };
@@ -93,7 +93,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Land,
+                Type = PolicyType.Land.ToString(),
                 BondAmount = 200000,
                 Valuation = 200000
             };
@@ -116,7 +116,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Life,
+                Type = PolicyType.Life.ToString(),
                 DateOfBirth = DateTime.Now.AddYears(-20),
                 Amount = 25000,
                 IsSmoker = false
@@ -136,7 +136,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Life,
+                Type = PolicyType.Life.ToString(),
                 DateOfBirth = DateTime.Now.AddYears(-20),
                 Amount = 25000,
                 IsSmoker = true
@@ -160,7 +160,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Flood,
+                Type = PolicyType.Flood.ToString(),
                 BondAmount = 200000,
                 Valuation = 260000
             };
@@ -179,7 +179,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Flood,
+                Type = PolicyType.Flood.ToString(),
                 BondAmount = 200000,
                 Valuation = 200000,
                 ElevationAboveSeaLevelFeet = 50
@@ -199,7 +199,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Flood,
+                Type = PolicyType.Flood.ToString(),
                 BondAmount = 200000,
                 Valuation = 200000,
                 ElevationAboveSeaLevelFeet = 250
@@ -219,7 +219,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Flood,
+                Type = PolicyType.Flood.ToString(),
                 BondAmount = 200000,
                 Valuation = 200000,
                 ElevationAboveSeaLevelFeet = 750
@@ -239,7 +239,7 @@ namespace ArdalisRating.Tests
         {
             var policy = new Policy
             {
-                Type = PolicyType.Flood,
+                Type = PolicyType.Flood.ToString(),
                 BondAmount = 200000,
                 Valuation = 200000,
                 ElevationAboveSeaLevelFeet = 1000
