@@ -13,11 +13,13 @@ namespace ArdalisRating
         {
             _logger.Log("Rating AUTO policy...");
             _logger.Log("Validating policy.");
+
             if (String.IsNullOrEmpty(policy.Make))
             {
                 _logger.Log("Auto policy must specify Make");
                 return;
             }
+
             if (policy.Make == "BMW")
             {
                 if (policy.Deductible < 500)
