@@ -255,5 +255,26 @@ namespace ArdalisRating.Tests
         }
 
         #endregion
+
+        #region Unknown Policy Tests
+
+        [Fact]
+        public void ReturnsRatingOf0ForUnknownPolicy()
+        {
+            var policy = new Policy
+            {
+                Type = "Foo"
+            };
+            string json = JsonConvert.SerializeObject(policy);
+            File.WriteAllText("policy.json", json);
+
+            var engine = new RatingEngine();
+            engine.Rate();
+            var result = engine.Rating;
+
+            Assert.Equal(0, result);
+        }
+
+        #endregion
     }
 }
