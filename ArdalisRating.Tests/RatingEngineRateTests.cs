@@ -9,13 +9,15 @@ namespace ArdalisRating.Tests
         private readonly FakeLogger _logger;
         private readonly FakePolicySource _policySource;
         private readonly JsonPolicySerializer _policySerializer;
+        private readonly RaterFactory _raterFactory;
 
         public RatingEngineRateTests()
         {
             _logger = new FakeLogger();
             _policySource = new FakePolicySource();
             _policySerializer = new JsonPolicySerializer();
-            _engine = new RatingEngine(_logger, _policySource, _policySerializer);
+            _raterFactory = new RaterFactory(_logger);
+            _engine = new RatingEngine(_logger, _policySource, _policySerializer, _raterFactory);
         }
 
         [Fact]
@@ -48,8 +50,8 @@ namespace ArdalisRating.Tests
             _policySource.PolicyString = JsonConvert.SerializeObject(policy);
 
             _engine.Rate();
-            var result = _engine.Rating;
 
+            var result = _engine.Rating;
             Assert.Equal(10000m, result);
         }
 
@@ -65,8 +67,8 @@ namespace ArdalisRating.Tests
             _policySource.PolicyString = JsonConvert.SerializeObject(policy);
 
             _engine.Rate();
-            var result = _engine.Rating;
 
+            var result = _engine.Rating;
             Assert.Equal(0m, result);
         }
     }

@@ -8,18 +8,21 @@ namespace ArdalisRating
 
         private readonly IPolicySource _policySource;
         private readonly IPolicySerializer _policySerializer;
+        private readonly IRaterFactory _raterFactory;
 
         public DefaultRatingContext(
             IPolicySource policySource,
-            IPolicySerializer policySerializer)
+            IPolicySerializer policySerializer,
+            IRaterFactory raterFactory)
         {
             _policySource = policySource;
             _policySerializer = policySerializer;
+            _raterFactory = raterFactory;
         }
 
-        public Rater CreateRaterForPolicy(Policy policy, IRatingContext context)
+        public Rater CreateRaterForPolicy(Policy policy)
         {
-            return new RaterFactory().Create(policy, context);
+            return _raterFactory.Create(policy);
         }
 
         public Policy GetPolicyFromJsonString(string policyJson)

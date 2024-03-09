@@ -5,35 +5,38 @@ namespace ArdalisRating.Tests
 {
     public class AutoPolicyRaterRateTests
     {
-        [Fact]
-        public void LogsMakeRequiredMessageGivenPolicyWithoutMake()
+        private readonly FakeLogger _logger;
+
+        public AutoPolicyRaterRateTests()
         {
-            var policy = new Policy { Type = PolicyType.Auto.ToString() };
-            var logger = new FakeLogger();
-            var rater = new AutoPolicyRater(null)
-            {
-                Logger = logger
-            };
-
-            rater.Rate(policy);
-
-            Assert.Equal("Auto policy must specify Make", logger.LoggedMessages.Last());
+            _logger = new FakeLogger();
         }
 
         [Fact]
-        public void SetsRatingToNullGivenNonBMWMake()
+        public void LogsMakeRequiredMessageAndSetsRatingTo0GivenPolicyWithoutMake()
+        {
+            var policy = new Policy { Type = PolicyType.Auto.ToString() };
+            var rater = new AutoPolicyRater(_logger);
+
+            var result = rater.Rate(policy);
+
+            Assert.Equal(0m, result);
+            Assert.Equal("Auto policy must specify Make", _logger.LoggedMessages.Last());
+        }
+
+        [Fact]
+        public void SetsRatingTo0GivenNonBMWMake()
         {
             var policy = new Policy
             {
                 Type = PolicyType.Auto.ToString(),
                 Make = "Mercedes"
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rater = new AutoPolicyRater(ratingUpdater);
+            var rater = new AutoPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Null(ratingUpdater.NewRating);
+            Assert.Equal(0m, result);
         }
 
         [Fact]
@@ -45,12 +48,11 @@ namespace ArdalisRating.Tests
                 Make = "BMW",
                 Deductible = 250m
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rater = new AutoPolicyRater(ratingUpdater);
+            var rater = new AutoPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Equal(1000m, ratingUpdater.NewRating.Value);
+            Assert.Equal(1000m, result);
         }
 
         [Fact]
@@ -62,12 +64,11 @@ namespace ArdalisRating.Tests
                 Make = "BMW",
                 Deductible = 500m
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rater = new AutoPolicyRater(ratingUpdater);
+            var rater = new AutoPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Equal(900m, ratingUpdater.NewRating.Value);
+            Assert.Equal(900m, result);
         }
     }
 }

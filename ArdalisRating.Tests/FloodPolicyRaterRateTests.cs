@@ -1,15 +1,21 @@
-﻿using Newtonsoft.Json;
-using System.Linq;
+﻿using System.Linq;
 using Xunit;
 
 namespace ArdalisRating.Tests
 {
     public class FloodPolicyRaterRateTests
     {
+        private readonly FakeLogger _logger;
+
+        public FloodPolicyRaterRateTests()
+        {
+            _logger = new FakeLogger();
+        }
+
         [Theory]
         [InlineData(0, 200000)]
         [InlineData(200000, 0)]
-        public void LogsBondAmountAndValuationRequiredGiven0BondAmountOr0Valuation(decimal bondAmount, decimal valuation)
+        public void LogsBondAmountAndValuationRequiredAndSetsRatingTo0Given0BondAmountOr0Valuation(decimal bondAmount, decimal valuation)
         {
             var policy = new Policy
             {
@@ -17,21 +23,18 @@ namespace ArdalisRating.Tests
                 BondAmount = bondAmount,
                 Valuation = valuation
             };
-            var logger = new FakeLogger();
-            var rating = new FloodPolicyRater(null)
-            {
-                Logger = logger
-            };
-            
-            rating.Rate(policy);
+            var rating = new FloodPolicyRater(_logger);
 
-            Assert.Equal("Flood policy must specify Bond Amount and Valuation.", logger.LoggedMessages.Last());
+            var result = rating.Rate(policy);
+
+            Assert.Equal(0m, result);
+            Assert.Equal("Flood policy must specify Bond Amount and Valuation.", _logger.LoggedMessages.Last());
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(-1000)]
-        public void LogsPolicyNotAvailableMessageGivenElevationAtOrBelowSeaLevel(int elevation)
+        public void LogsPolicyNotAvailableMessageAndSetsRatingTo0GivenElevationAtOrBelowSeaLevel(int elevation)
         {
             var policy = new Policy
             {
@@ -40,19 +43,16 @@ namespace ArdalisRating.Tests
                 Valuation = 200000m,
                 ElevationAboveSeaLevelFeet = elevation
             };
-            var logger = new FakeLogger();
-            var rating = new FloodPolicyRater(null)
-            {
-                Logger = logger
-            };
+            var rating = new FloodPolicyRater(_logger);
 
-            rating.Rate(policy);
+            var result = rating.Rate(policy);
 
-            Assert.Equal("Flood policy is not available for elevations at or below sea level.", logger.LoggedMessages.Last());
+            Assert.Equal(0m, result);
+            Assert.Equal("Flood policy is not available for elevations at or below sea level.", _logger.LoggedMessages.Last());
         }
 
         [Fact]
-        public void InsufficientBondAmountMessageGiven200000BondAmountWith260000Valuation()
+        public void LogsInsufficientBondAmountMessageAndSetsRatingTo0Given200000BondAmountWith260000Valuation()
         {
             var policy = new Policy
             {
@@ -61,19 +61,16 @@ namespace ArdalisRating.Tests
                 Valuation = 260000m,
                 ElevationAboveSeaLevelFeet = 1000
             };
-            var logger = new FakeLogger();
-            var rating = new FloodPolicyRater(null)
-            {
-                Logger = logger
-            };
+            var rating = new FloodPolicyRater(_logger);
 
-            rating.Rate(policy);
+            var result = rating.Rate(policy);
 
-            Assert.Equal("Insufficient bond amount.", logger.LoggedMessages.Last());
+            Assert.Equal(0m, result);
+            Assert.Equal("Insufficient bond amount.", _logger.LoggedMessages.Last());
         }
 
         [Fact]
-        public void SetsRatingToNullGiven200000BondAmountWith260000Valuation()
+        public void SetsRatingTo0Given200000BondAmountWith260000Valuation()
         {
             var policy = new Policy
             {
@@ -81,11 +78,11 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 260000m
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rating = new FloodPolicyRater(ratingUpdater);
-            rating.Rate(policy);
+            var rating = new FloodPolicyRater(_logger);
 
-            Assert.Null(ratingUpdater.NewRating);
+            var result = rating.Rate(policy);
+
+            Assert.Equal(0m, result);
         }
 
         [Fact]
@@ -98,11 +95,11 @@ namespace ArdalisRating.Tests
                 Valuation = 200000m,
                 ElevationAboveSeaLevelFeet = 50
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rating = new FloodPolicyRater(ratingUpdater);
-            rating.Rate(policy);
+            var rating = new FloodPolicyRater(_logger);
 
-            Assert.Equal(20000m, ratingUpdater.NewRating.Value);
+            var result = rating.Rate(policy);
+
+            Assert.Equal(20000m, result);
         }
 
         [Fact]
@@ -115,11 +112,11 @@ namespace ArdalisRating.Tests
                 Valuation = 200000m,
                 ElevationAboveSeaLevelFeet = 250
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rating = new FloodPolicyRater(ratingUpdater);
-            rating.Rate(policy);
+            var rating = new FloodPolicyRater(_logger);
 
-            Assert.Equal(15000m, ratingUpdater.NewRating.Value);
+            var result = rating.Rate(policy);
+
+            Assert.Equal(15000m, result);
         }
 
         [Fact]
@@ -132,11 +129,11 @@ namespace ArdalisRating.Tests
                 Valuation = 200000m,
                 ElevationAboveSeaLevelFeet = 750
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rating = new FloodPolicyRater(ratingUpdater);
-            rating.Rate(policy);
+            var rating = new FloodPolicyRater(_logger);
 
-            Assert.Equal(11000m, ratingUpdater.NewRating.Value);
+            var result = rating.Rate(policy);
+
+            Assert.Equal(11000m, result);
         }
 
         [Fact]
@@ -149,11 +146,11 @@ namespace ArdalisRating.Tests
                 Valuation = 200000m,
                 ElevationAboveSeaLevelFeet = 1000
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rating = new FloodPolicyRater(ratingUpdater);
-            rating.Rate(policy);
+            var rating = new FloodPolicyRater(_logger);
 
-            Assert.Equal(10000m, ratingUpdater.NewRating.Value);
+            var result = rating.Rate(policy);
+
+            Assert.Equal(10000m, result);
         }
     }
 }

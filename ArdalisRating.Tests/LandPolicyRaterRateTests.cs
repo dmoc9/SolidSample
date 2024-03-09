@@ -5,10 +5,17 @@ namespace ArdalisRating.Tests
 {
     public class LandPolicyRaterRateTests
     {
+        private readonly FakeLogger _logger;
+
+        public LandPolicyRaterRateTests()
+        {
+            _logger = new FakeLogger();
+        }
+
         [Theory]
         [InlineData(0, 200000)]
         [InlineData(200000, 0)]
-        public void LogsBondAmountAndValuationRequiredGiven0BondAmountOr0Valuation(decimal bondAmount, decimal valuation)
+        public void LogsBondAmountAndValuationRequiredMessageAndSetsRatingTo0Given0BondAmountOr0Valuation(decimal bondAmount, decimal valuation)
         {
             var policy = new Policy
             {
@@ -16,19 +23,16 @@ namespace ArdalisRating.Tests
                 BondAmount = bondAmount,
                 Valuation = valuation
             };
-            var logger = new FakeLogger();
-            var rater = new LandPolicyRater(null)
-            {
-                Logger = logger
-            };
+            var rater = new LandPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Equal("Land policy must specify Bond Amount and Valuation.", logger.LoggedMessages.Last());
+            Assert.Equal(0m, result);
+            Assert.Equal("Land policy must specify Bond Amount and Valuation.", _logger.LoggedMessages.Last());
         }
-        
+
         [Fact]
-        public void LogsInsufficientBondAmountMessageGiven200000BondAmountWith260000Valuation()
+        public void LogsInsufficientBondAmountMessageAndSetsRatingTo0Given200000BondAmountWith260000Valuation()
         {
             var policy = new Policy
             {
@@ -36,19 +40,16 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 260000m
             };
-            var logger = new FakeLogger();
-            var rater = new LandPolicyRater(null)
-            {
-                Logger = logger
-            };
+            var rater = new LandPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Equal("Insufficient bond amount.", logger.LoggedMessages.Last());
+            Assert.Equal(0m, result);
+            Assert.Equal("Insufficient bond amount.", _logger.LoggedMessages.Last());
         }
 
         [Fact]
-        public void SetsRatingToNullGiven200000BondAmountWith260000Valuation()
+        public void SetsRatingTo0Given200000BondAmountWith260000Valuation()
         {
             var policy = new Policy
             {
@@ -56,12 +57,11 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 260000m
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rater = new LandPolicyRater(ratingUpdater);
+            var rater = new LandPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Null(ratingUpdater.NewRating);
+            Assert.Equal(0m, result);
         }
 
         [Fact]
@@ -73,12 +73,11 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 200000m
             };
-            var ratingUpdater = new FakeRatingUpdater();
-            var rater = new LandPolicyRater(ratingUpdater);
+            var rater = new LandPolicyRater(_logger);
 
-            rater.Rate(policy);
+            var result = rater.Rate(policy);
 
-            Assert.Equal(10000m, ratingUpdater.NewRating.Value);
+            Assert.Equal(10000m, result);
         }
 
     }

@@ -5,22 +5,26 @@ namespace ArdalisRating.Tests
 {
     public class UnknownPolicyRaterRateTests
     {
+        private readonly FakeLogger _logger;
+
+        public UnknownPolicyRaterRateTests()
+        {
+            _logger = new FakeLogger();
+        }
+
         [Fact]
-        public void LogsUnknownPolicyTypeMessage()
+        public void LogsUnknownPolicyTypeMessageAndSetsRatingTo0()
         {
             var policy = new Policy
             {
                 Type = "Foo"
             };
-            var logger = new FakeLogger();
-            var rating = new UnknownPolicyRater(null)
-            {
-                Logger = logger
-            };
+            var rating = new UnknownPolicyRater(_logger);
 
-            rating.Rate(policy);
+            var result = rating.Rate(policy);
 
-            Assert.Equal("Unknown policy type", logger.LoggedMessages.Last());
+            Assert.Equal(0m, result);
+            Assert.Equal("Unknown policy type", _logger.LoggedMessages.Last());
         }
     }
 }

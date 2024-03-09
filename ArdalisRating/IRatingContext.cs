@@ -3,7 +3,7 @@
     public interface IRatingContext : ILogger
     {
         RatingEngine Engine { get; set; }
-        Rater CreateRaterForPolicy(Policy policy, IRatingContext context);
+        Rater CreateRaterForPolicy(Policy policy);
         Policy GetPolicyFromJsonString(string policyJson);
         Policy GetPolicyFromXmlString(string policyXml);
         string LoadPolicyFromFile();
