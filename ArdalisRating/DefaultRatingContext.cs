@@ -33,13 +33,7 @@ namespace ArdalisRating
 
         public void Log(string message)
         {
-            // TODO: Shouldn't this just use Console instead of instantiating a new ConsoleLogger?
             new ConsoleLogger().Log(message);
-        }
-
-        public void UpdateRating(decimal rating)
-        {
-            Engine.Rating = rating;
         }
     }
 }
