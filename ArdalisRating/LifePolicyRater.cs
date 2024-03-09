@@ -4,8 +4,8 @@ namespace ArdalisRating
 {
     public class LifePolicyRater : Rater
     {
-        public LifePolicyRater(IRatingContext context)
-            : base(context)
+        public LifePolicyRater(IRatingUpdater ratingUpdater)
+            : base(ratingUpdater)
         {
         }
 
@@ -45,10 +45,10 @@ namespace ArdalisRating
 
             if (policy.IsSmoker)
             {
-                _context.UpdateRating(baseRate * 2);
+                _ratingUpdater.UpdateRating(baseRate * 2);
                 return;
             }
-            _context.UpdateRating(baseRate);
+            _ratingUpdater.UpdateRating(baseRate);
         }
     }
 }

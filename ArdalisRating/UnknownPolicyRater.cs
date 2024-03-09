@@ -2,8 +2,8 @@
 {
     public class UnknownPolicyRater : Rater
     {
-        public UnknownPolicyRater(IRatingContext context)
-            : base(context)
+        public UnknownPolicyRater(IRatingUpdater ratingUpdater)
+            : base(ratingUpdater)
         {
         }
 
