@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using System.IO;
 using Xunit;
 
 namespace ArdalisRating.Tests
@@ -8,11 +7,13 @@ namespace ArdalisRating.Tests
     {
         private readonly RatingEngine _engine;
         private readonly FakeLogger _logger;
+        private readonly FakePolicySource _policySource;
 
         public RatingEngineRateTests()
         {
             _logger = new FakeLogger();
-            _engine = new RatingEngine(_logger);
+            _policySource = new FakePolicySource();
+            _engine = new RatingEngine(_logger, _policySource);
         }
 
         [Fact]
@@ -24,8 +25,7 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 200000m
             };
-            string json = JsonConvert.SerializeObject(policy);
-            File.WriteAllText("policy.json", json);
+            _policySource.PolicyString = JsonConvert.SerializeObject(policy);
 
             _engine.Rate();
 
@@ -43,8 +43,7 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 200000m
             };
-            string json = JsonConvert.SerializeObject(policy);
-            File.WriteAllText("policy.json", json);
+            _policySource.PolicyString = JsonConvert.SerializeObject(policy);
 
             _engine.Rate();
             var result = _engine.Rating;
@@ -61,8 +60,7 @@ namespace ArdalisRating.Tests
                 BondAmount = 200000m,
                 Valuation = 260000m
             };
-            string json = JsonConvert.SerializeObject(policy);
-            File.WriteAllText("policy.json", json);
+            _policySource.PolicyString = JsonConvert.SerializeObject(policy);
 
             _engine.Rate();
             var result = _engine.Rating;
