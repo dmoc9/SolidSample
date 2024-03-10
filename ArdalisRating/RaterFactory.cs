@@ -2,7 +2,7 @@
 
 namespace ArdalisRating
 {
-    public class RaterFactory : IRaterFactory
+    public class RaterFactory
     {
         private readonly ILogger _logger;
 

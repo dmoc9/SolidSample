@@ -9,7 +9,7 @@
         private readonly ILogger _logger;
         private readonly IPolicySource _policySource;
         private readonly IPolicySerializer _policySerializer;
-        private readonly IRaterFactory _raterFactory;
+        private readonly RaterFactory _raterFactory;
 
         public decimal Rating { get; set; }
 
@@ -17,7 +17,7 @@
             ILogger logger,
             IPolicySource policySource,
             IPolicySerializer policySerializer,
-            IRaterFactory raterFactory)
+            RaterFactory raterFactory)
         {
             _logger = logger;
             _policySource = policySource;
