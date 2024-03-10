@@ -1,14 +1,12 @@
-﻿using System;
-
-namespace ArdalisRating
+﻿namespace ArdalisRating
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Ardalis Insurance Rating System Starting...");
-
             var logger = new FileLogger();
+
+            logger.Log("Ardalis Insurance Rating System Starting...");
 
             var engine = new RatingEngine(
                 logger,
@@ -20,13 +18,14 @@ namespace ArdalisRating
 
             if (engine.Rating > 0)
             {
-                Console.WriteLine($"Rating: {engine.Rating}");
+                logger.Log($"Rating: {engine.Rating}");
             }
             else
             {
-                Console.WriteLine("No rating produced.");
+                logger.Log("No rating produced.");
             }
 
+            logger.Log("");
         }
     }
 }
